@@ -581,7 +581,7 @@ print "Observaciones:", wscdc.Obs
             moneda_ctz = inv.currency_id.rate
             if not moneda_id:
                 raise ValidationError('No esta definido el codigo AFIP en la moneda')
-
+            cond_iva_receptor = commercial_partner.l10n_ar_afip_responsibility_type_id.code
 
             CbteAsoc = inv.get_related_invoices_data()
 
@@ -595,7 +595,8 @@ print "Observaciones:", wscdc.Obs
                     imp_iva,
                     imp_trib, imp_op_ex, fecha_cbte, fecha_venc_pago,
                     fecha_serv_desde, fecha_serv_hasta,
-                    moneda_id, round(moneda_ctz,2)
+                    moneda_id, round(moneda_ctz,2),
+                    cond_iva_receptor
                 )
                 if inv.other_taxes_amount > 0:
                     for move_tax in inv.move_tax_ids:

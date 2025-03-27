@@ -564,6 +564,8 @@ class AccountPaymentGroup(models.Model):
             if rec.partner_type:
                 rec.account_internal_type = MAP_PARTNER_TYPE_ACCOUNT_TYPE[
                     rec.partner_type]
+            else:
+                rec.account_internal_type = False
 
     def _compute_payment_difference(self):
         for rec in self:

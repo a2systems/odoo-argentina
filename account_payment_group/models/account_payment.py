@@ -308,7 +308,6 @@ class AccountPayment(models.Model):
         apply when the all the counterpart account are receivable/payable """
         # Si viene counterpart_aml entonces estamos viniendo de una
         # conciliacion desde el wizard
-        import pdb;pdb.set_trace()
         new_aml_dicts = self._context.get('new_aml_dicts', [])
         counterpart_aml_data = self._context.get('counterpart_aml_dicts', [])
         if counterpart_aml_data or new_aml_dicts:
