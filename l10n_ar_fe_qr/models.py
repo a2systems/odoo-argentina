@@ -7,8 +7,8 @@ class AccountMove(models.Model):
 
     def _compute_json_qr(self):
         for rec in self:
-            dict_invoice = ''
-            if rec.move_type in ['out_invoice','out_refund'] and rec.state == 'posted' and rec.afip_auth_code != '':
+            dict_invoice = None
+            if rec.move_type in ['out_invoice','out_refund'] and rec.state == 'posted' and rec.afip_auth_code:
                 try:
                     dict_invoice = {
                         "ver": 1,
@@ -23,21 +23,18 @@ class AccountMove(models.Model):
                         "tipoDocRec": int(rec.partner_id.l10n_latam_identification_type_id.l10n_ar_afip_code),
                         "nroDocRec": int(rec.partner_id.vat),
                         "tipoCodAut": 'E',
-                        "codAut": rec.afip_auth_code,
+                        "codAut": int(rec.afip_auth_code),
                         }
                 except:
-                    dict_invoice = 'ERROR'
-                    pass
-                res = str(dict_invoice).replace("\n", "")
+                    dict_invoice = None
+            if dict_invoice:
+                res = json.dumps(dict_invoice)
+                rec.json_qr = res
+                b64 = base64.b64encode(res.encode('utf-8')).decode('utf-8')
+                rec.texto_modificado_qr = 'https://www.afip.gob.ar/fe/qr/?p=' + b64
             else:
-                res = 'N/A'
-            rec.json_qr = res
-            if type(dict_invoice) == dict:
-                enc = res.encode('utf-8')
-                b64 = base64.b64encode(enc)
-                rec.texto_modificado_qr = 'https://www.afip.gob.ar/fe/qr/?p=' + str(b64, 'utf-8')
-            else:
-                rec.texto_modificado_qr = 'https://www.afip.gob.ar/fe/qr/?ERROR'
-    
-    json_qr = fields.Char("JSON QR AFIP",compute=_compute_json_qr)
-    texto_modificado_qr = fields.Char('Texto Modificado QR',compute=_compute_json_qr)
+                rec.json_qr = ''
+                rec.texto_modificado_qr = ''
+
+    json_qr = fields.Char("JSON QR AFIP", compute=_compute_json_qr)
+    texto_modificado_qr = fields.Char('Texto Modificado QR', compute=_compute_json_qr)

@@ -4,19 +4,22 @@
 
 	   <template id="qr_report_invoice_document" inherit_id="account.report_invoice_document">
 		<xpath expr="//div[@id='qrcode']" position="replace">
-	            <div class="footer" style="border: 1px solid black;">
+	            <div id="qrcode" style="border: 1px solid black;">
 	              <div class="row" style="margin-bottom: 0px !important; padding-top: 3px; padding-bottom: 3px;">
         	        <div class="col-4" t-if="o.afip_cae">
                 	    <p/>
 	                    <p><strong> CAE: </strong><span t-field="o.afip_cae"/></p>
         	            <p><strong> Fecha Vencimiento CAE: </strong><span t-field="o.afip_cae_due"/></p>
 		    	</div> <!-- cierra col-4 -->
-                	<div class="col-2" t-if="o.texto_modificado_qr">
+                	<div class="col-2" t-if="o.qr_code">
 	                    <p/>
         	            <strong>Codigo QR: </strong>
 		    	</div> <!-- cierra col-2 -->
-	                <div class="col-6" t-if="o.texto_modificado_qr">
-                	  <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('QR', o.texto_modificado_qr, 180, 180)" style="width:185px;height:185px"/>
+	                <div class="col-6" t-if="o.qr_code">
+                	  <img class="border border-dark rounded"
+			       height="140" width="140"
+			       align="right" style="margin: 0px; padding-top: 0px;"
+			       t-att-src="image_data_uri(o.qr_code)"/>
 			</div> <!-- cierra col-6 -->
 		     </div> <!-- cierra row -->
 		  </div> <!-- cierra el footer -->

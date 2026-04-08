@@ -7,7 +7,7 @@
 	<field name="arch" type="xml">
 		<field name="partner_type" position="after">
 			<field name="print_withholding" optional="hide" />
-			<button name="btn_print_withholding" type="object" string="Imprimir Retencion" 
+			<button name="btn_print_withholding" type="object" icon="fa-print" title="Imprimir Retención"
 				invisible = "print_withholding == False"/>
 		</field>
         </field>
