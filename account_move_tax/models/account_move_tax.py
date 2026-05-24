@@ -77,6 +77,11 @@ class AccountMove(models.Model):
                                 vals['tax_amount'] = line.credit
                             else:
                                 vals['tax_amount'] = line.debit
+                            base_amount = 0
+                            for inv_line in self.invoice_line_ids:
+                                if inv_line.tax_ids and tax.id in inv_line.tax_ids.ids:
+                                    base_amount = base_amount + inv_line.price_subtotal
+                            vals['base_amount'] = base_amount
                             move_tax_id = self.env['account.move.tax'].create(vals)
 
                 else:
